@@ -1,54 +1,36 @@
-const mongoose = require('mongoose');
+// cd to mongo in flatiron folder
+// cd to bin folder
+// run ./mongod --dbpath ~/mongo-data
 
-const url = 'mongodb://localhost:27017/TodoApp';
+const express = require('express')
+const bodyParser = require('body-parser')
 
-mongoose.Promise = global.Promise;
-mongoose.connect(url);
+const {mongoose} = require('./db/mongoose');
+const {Todo} = require('./models/todo')
+const {User} = require('./models/user')
 
-const Todo = mongoose.model('Todo', {
-  text: {
-    type: String,
-    required: true,
-    minlength: 1,
-    trim: true //remove extra space in the string
-  },
-  completed: {
-    type: Boolean,
-    default: false
-  },
-  completedAt: {
-    type: Number,
-    default: null
-  }
-});
+const app = express()
 
-// let anotherTodo = new Todo({
-//   text: "Cook Dinner",
-//   completed: false,
-//   completedAt: new Date()
-// });
-//
-// anotherTodo.save().then((doc) => {
-//   console.log('Save Todo', doc);
-// }, e => {
-//   console.log("unable to save", e);
-// });
+app.use(bodyParser.json());
 
-const User = mongoose.model('User', {
-  email: {
-    type: String,
-    required: true,
-    minlength: 1,
-    trim: true //remove extra space in the string
-  }
-});
-
-let newUser = new User({
-  email: 'jshen9085@gmail.com'
+app.post('/todos', (req, res) => {
+  let todo = new Todo({
+    text: req.body.text
+  })
+  todo.save().then(doc => {
+    res.send(doc)
+  }, e => {
+    res.status(400).send(e);
+  })
 })
 
-newUser.save().then(doc => {
-  console.log('Save User', doc);
-}, e => {
-  console.log('Unable to save');
+app.get('/todos', (req, res) => {
+  console.log('GOT IT');
+})
+
+
+
+
+app.listen(3000, () => {
+  console.log('Started on port 3000');
 })
