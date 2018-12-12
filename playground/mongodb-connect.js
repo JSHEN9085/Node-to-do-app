@@ -11,8 +11,8 @@ MongoClient.connect(url, (err, client) => {
   const db = client.db('TodoApp')
 
   // db.collection('Todos').insertOne({ //insertOne is used to crate new object in Mongo
-  //   text: 'Something to do',
-  //   completed: true
+  //   text: 'Take break',
+  //   completed: false
   // }, (err, result) => {
   //   if(err){
   //     return console.log('Unable to insert todo', err);
